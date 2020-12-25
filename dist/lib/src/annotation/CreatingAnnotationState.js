@@ -3,7 +3,17 @@ var CreatingAnnotationState = /** @class */ (function () {
     function CreatingAnnotationState(context) {
         var _this = this;
         this.onMouseDown = function () { return undefined; };
-        this.onMouseMove = function () { return undefined; };
+        this.onMouseMove = function (positionX, positionY) {
+            var shapes = _this.context.shapes;
+            if (shapes.length > 0) {
+                var currentShape = shapes[shapes.length - 1];
+                var _a = currentShape.getAnnotationData().mark, x = _a.x, y = _a.y;
+                currentShape.adjustMark({
+                    width: positionX - x,
+                    height: positionY - y,
+                });
+            }
+        };
         this.onMouseUp = function () {
             var _a = _this.context, shapes = _a.shapes, onShapeChange = _a.onShapeChange, setAnnotationState = _a.setAnnotationState;
             var data = shapes.pop();

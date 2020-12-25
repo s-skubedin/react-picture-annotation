@@ -581,8 +581,22 @@ var CreatingAnnotationState = function CreatingAnnotationState(context) {
     return undefined;
   };
 
-  this.onMouseMove = function () {
-    return undefined;
+  this.onMouseMove = function (positionX, positionY) {
+    var shapes = _this.context.shapes;
+
+    if (shapes.length > 0) {
+      var currentShape = shapes[shapes.length - 1];
+
+      var _currentShape$getAnno = currentShape.getAnnotationData(),
+          _currentShape$getAnno2 = _currentShape$getAnno.mark,
+          x = _currentShape$getAnno2.x,
+          y = _currentShape$getAnno2.y;
+
+      currentShape.adjustMark({
+        width: positionX - x,
+        height: positionY - y
+      });
+    }
   };
 
   this.onMouseUp = function () {
