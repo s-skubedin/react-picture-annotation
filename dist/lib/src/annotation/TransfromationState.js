@@ -3,12 +3,7 @@ var TransformationState = /** @class */ (function () {
     function TransformationState(context) {
         var _this = this;
         this.onMouseDown = function () { return undefined; };
-        this.onMouseMove = function (positionX, positionY) {
-            var currentTransformer = _this.context.currentTransformer;
-            if (currentTransformer) {
-                currentTransformer.onTransformation(positionX, positionY);
-            }
-        };
+        this.onMouseMove = function () { return undefined; };
         this.onMouseUp = function () {
             var setAnnotationState = _this.context.setAnnotationState;
             setAnnotationState(new DefaultAnnotationState(_this.context));

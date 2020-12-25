@@ -8,12 +8,7 @@ export default class TransformationState implements IAnnotationState {
     this.context = context;
   }
   public onMouseDown = () => undefined;
-  public onMouseMove = (positionX: number, positionY: number) => {
-    const { currentTransformer } = this.context;
-    if (currentTransformer) {
-      currentTransformer.onTransformation(positionX, positionY);
-    }
-  };
+  public onMouseMove = () => undefined;
 
   public onMouseUp = () => {
     const { setAnnotationState } = this.context;

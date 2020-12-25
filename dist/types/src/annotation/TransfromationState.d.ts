@@ -4,7 +4,7 @@ export default class TransformationState implements IAnnotationState {
     private readonly context;
     constructor(context: ReactPictureAnnotation);
     onMouseDown: () => undefined;
-    onMouseMove: (positionX: number, positionY: number) => void;
+    onMouseMove: () => undefined;
     onMouseUp: () => void;
     onMouseLeave: () => void;
 }
