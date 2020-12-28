@@ -616,12 +616,12 @@
       _this.context.selectedId = null;
       var annotationData = data && data.getAnnotationData();
 
-      if (data && annotationData && annotationData.mark.width !== 0 && annotationData.mark.height !== 0 && typeof annotationData.id !== 'number') {
+      if (data && annotationData && annotationData.mark.width !== 0 && annotationData.mark.height !== 0) {
         var _this$context$props$d = _slicedToArray(_this.context.props.defaultAnnotationSize, 2),
             width = _this$context$props$d[0],
             height = _this$context$props$d[1];
 
-        if (Math.abs(annotationData.mark.width) >= width && Math.abs(annotationData.mark.height) >= height) {
+        if (Math.abs(annotationData.mark.width) >= width && Math.abs(annotationData.mark.height) >= height && typeof annotationData.id !== "number") {
           _this.context.selectedId = annotationData.id;
           _this.context.currentTransformer = new Transformer(data, _this.context.scaleState.scale);
           shapes.push(data);

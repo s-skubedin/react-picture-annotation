@@ -32,14 +32,14 @@ export default class CreatingAnnotationState implements IAnnotationState {
       data &&
       annotationData &&
       annotationData.mark.width !== 0 &&
-      annotationData.mark.height !== 0 &&
-      typeof annotationData.id !== "number"
+      annotationData.mark.height !== 0
     ) {
       const [width, height] = this.context.props.defaultAnnotationSize;
 
       if (
         Math.abs(annotationData.mark.width) >= width &&
-        Math.abs(annotationData.mark.height) >= height
+        Math.abs(annotationData.mark.height) >= height &&
+        typeof annotationData.id !== "number"
       ) {
         this.context.selectedId = annotationData.id;
         this.context.currentTransformer = new Transformer(
