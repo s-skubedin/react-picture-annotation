@@ -25,7 +25,7 @@ interface IReactPictureAnnotationProps {
   height: number;
   image: string;
   annotationStyle: IShapeStyle;
-  defaultAnnotationSize?: number[];
+  defaultAnnotationSize: number[];
   inputElement: (
     value: string,
     onChange: (value: string) => void,
@@ -49,6 +49,7 @@ export default class ReactPictureAnnotation extends React.Component<IReactPictur
   public static defaultProps = {
     marginWithInput: 10,
     scrollSpeed: 0.0005,
+    defaultAnnotationSize: [10, 10],
     hideBoundingBoxes: false,
     annotationStyle: defaultShapeStyle,
     onLoad: () => undefined,

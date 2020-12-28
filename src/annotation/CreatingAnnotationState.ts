@@ -1,7 +1,7 @@
-import { ReactPictureAnnotation } from "index";
-import { IShape } from "Shape";
+import { ReactPictureAnnotation } from "../index";
 import { IAnnotationState } from "./AnnotationState";
 import { DefaultAnnotationState } from "./DefaultAnnotationState";
+import Transformer from "../Transformer";
 
 export default class CreatingAnnotationState implements IAnnotationState {
   private readonly context: ReactPictureAnnotation;
@@ -26,41 +26,30 @@ export default class CreatingAnnotationState implements IAnnotationState {
   public onMouseUp = () => {
     const { shapes, onShapeChange, setAnnotationState } = this.context;
     const data = shapes.pop();
+    this.context.selectedId = null;
+    const annotationData = data && data.getAnnotationData();
     if (
       data &&
-      data.getAnnotationData().mark.width !== 0 &&
-      data.getAnnotationData().mark.height !== 0
+      annotationData &&
+      annotationData.mark.width !== 0 &&
+      annotationData.mark.height !== 0
     ) {
-      shapes.push(data);
-    } else {
-      if (data && this.applyDefaultAnnotationSize(data)) {
+      const [width, height] = this.context.props.defaultAnnotationSize;
+
+      if (
+        Math.abs(annotationData.mark.width) >= width &&
+        Math.abs(annotationData.mark.height) >= height
+      ) {
+        this.context.selectedId = annotationData.id;
+        this.context.currentTransformer = new Transformer(
+          data,
+          this.context.scaleState.scale
+        );
         shapes.push(data);
-        onShapeChange();
-      } else {
-        this.context.selectedId = null;
-        onShapeChange();
       }
     }
+    onShapeChange();
     setAnnotationState(new DefaultAnnotationState(this.context));
-  };
-
-  private applyDefaultAnnotationSize = (shape: IShape) => {
-    if (this.context.selectedId) {
-      // Don't capture clicks meant to de-select another annotation.
-      return false;
-    }
-    if (
-      !this.context.defaultAnnotationSize ||
-      this.context.defaultAnnotationSize.length !== 2
-    ) {
-      return false;
-    }
-    const [width, height] = this.context.defaultAnnotationSize;
-    shape.adjustMark({
-      width,
-      height,
-    });
-    return true;
   };
 
   public onMouseLeave = () => this.onMouseUp();
