@@ -5,10 +5,10 @@ var CreatingAnnotationState = /** @class */ (function () {
         var _this = this;
         this.onMouseDown = function () { return undefined; };
         this.onMouseMove = function (positionX, positionY) {
-            var shapes = _this.context.shapes;
-            if (shapes.length > 0) {
+            var _a = _this.context, shapes = _a.shapes, selectedId = _a.selectedId;
+            if (shapes.length > 0 && !selectedId) {
                 var currentShape = shapes[shapes.length - 1];
-                var _a = currentShape.getAnnotationData().mark, x = _a.x, y = _a.y;
+                var _b = currentShape.getAnnotationData().mark, x = _b.x, y = _b.y;
                 currentShape.adjustMark({
                     width: positionX - x,
                     height: positionY - y,

@@ -10,8 +10,8 @@ export default class CreatingAnnotationState implements IAnnotationState {
   }
   public onMouseDown = () => undefined;
   public onMouseMove = (positionX: number, positionY: number) => {
-    const { shapes } = this.context;
-    if (shapes.length > 0) {
+    const { shapes, selectedId } = this.context;
+    if (shapes.length > 0 && !selectedId) {
       const currentShape = shapes[shapes.length - 1];
       const {
         mark: { x, y },

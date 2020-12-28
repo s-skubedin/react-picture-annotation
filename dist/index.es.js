@@ -631,9 +631,11 @@ var CreatingAnnotationState = function CreatingAnnotationState(context) {
   };
 
   this.onMouseMove = function (positionX, positionY) {
-    var shapes = _this.context.shapes;
+    var _this$context = _this.context,
+        shapes = _this$context.shapes,
+        selectedId = _this$context.selectedId;
 
-    if (shapes.length > 0) {
+    if (shapes.length > 0 && !selectedId) {
       var currentShape = shapes[shapes.length - 1];
 
       var _currentShape$getAnno = currentShape.getAnnotationData(),
@@ -649,10 +651,10 @@ var CreatingAnnotationState = function CreatingAnnotationState(context) {
   };
 
   this.onMouseUp = function () {
-    var _this$context = _this.context,
-        shapes = _this$context.shapes,
-        onShapeChange = _this$context.onShapeChange,
-        setAnnotationState = _this$context.setAnnotationState;
+    var _this$context2 = _this.context,
+        shapes = _this$context2.shapes,
+        onShapeChange = _this$context2.onShapeChange,
+        setAnnotationState = _this$context2.setAnnotationState;
     var data = shapes.pop();
     _this.context.selectedId = null;
     var annotationData = data && data.getAnnotationData();
@@ -1271,7 +1273,7 @@ var ReactPictureAnnotation = /*#__PURE__*/function (_React$Component) {
       }), showInput && /*#__PURE__*/React.createElement("div", {
         className: panelClassName,
         style: _objectSpread2({
-          position: 'absolute'
+          position: "absolute"
         }, inputPosition)
       }, inputElement(inputComment, this.onInputCommentChange, this.onDelete)));
     }
@@ -1305,7 +1307,7 @@ ReactPictureAnnotation.defaultProps = {
   scrollSpeed: 0.0005,
   defaultAnnotationSize: [10, 10],
   hideBoundingBoxes: false,
-  panelClassName: '',
+  panelClassName: "",
   annotationStyle: defaultShapeStyle,
   onLoad: function onLoad() {
     return undefined;
