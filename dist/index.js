@@ -613,41 +613,23 @@
           onShapeChange = _this$context.onShapeChange,
           setAnnotationState = _this$context.setAnnotationState;
       var data = shapes.pop();
+      _this.context.selectedId = null;
+      var annotationData = data && data.getAnnotationData();
 
-      if (data && data.getAnnotationData().mark.width !== 0 && data.getAnnotationData().mark.height !== 0) {
-        shapes.push(data);
-      } else {
-        if (data && _this.applyDefaultAnnotationSize(data)) {
+      if (data && annotationData && annotationData.mark.width !== 0 && annotationData.mark.height !== 0) {
+        var _this$context$props$d = _slicedToArray(_this.context.props.defaultAnnotationSize, 2),
+            width = _this$context$props$d[0],
+            height = _this$context$props$d[1];
+
+        if (Math.abs(annotationData.mark.width) >= width && Math.abs(annotationData.mark.height) >= height) {
+          _this.context.selectedId = annotationData.id;
+          _this.context.currentTransformer = new Transformer(data, _this.context.scaleState.scale);
           shapes.push(data);
-          onShapeChange();
-        } else {
-          _this.context.selectedId = null;
-          onShapeChange();
         }
       }
 
+      onShapeChange();
       setAnnotationState(new DefaultAnnotationState(_this.context));
-    };
-
-    this.applyDefaultAnnotationSize = function (shape) {
-      if (_this.context.selectedId) {
-        // Don't capture clicks meant to de-select another annotation.
-        return false;
-      }
-
-      if (!_this.context.defaultAnnotationSize || _this.context.defaultAnnotationSize.length !== 2) {
-        return false;
-      }
-
-      var _this$context$default = _slicedToArray(_this.context.defaultAnnotationSize, 2),
-          width = _this$context$default[0],
-          height = _this$context$default[1];
-
-      shape.adjustMark({
-        width: width,
-        height: height
-      });
-      return true;
     };
 
     this.onMouseLeave = function () {
@@ -1274,6 +1256,7 @@
   ReactPictureAnnotation.defaultProps = {
     marginWithInput: 10,
     scrollSpeed: 0.0005,
+    defaultAnnotationSize: [10, 10],
     hideBoundingBoxes: false,
     annotationStyle: defaultShapeStyle,
     onLoad: function onLoad() {

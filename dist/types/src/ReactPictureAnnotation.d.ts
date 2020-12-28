@@ -16,7 +16,7 @@ interface IReactPictureAnnotationProps {
     height: number;
     image: string;
     annotationStyle: IShapeStyle;
-    defaultAnnotationSize?: number[];
+    defaultAnnotationSize: number[];
     inputElement: (value: string, onChange: (value: string) => void, onDelete: () => void) => React.ReactElement;
 }
 interface IStageState {
@@ -28,6 +28,7 @@ export default class ReactPictureAnnotation extends React.Component<IReactPictur
     static defaultProps: {
         marginWithInput: number;
         scrollSpeed: number;
+        defaultAnnotationSize: number[];
         hideBoundingBoxes: boolean;
         annotationStyle: IShapeStyle;
         onLoad: () => undefined;
@@ -44,7 +45,7 @@ export default class ReactPictureAnnotation extends React.Component<IReactPictur
     set selectedId(value: string | null);
     get selectedId(): string | null;
     get annotationStyle(): IShapeStyle;
-    get defaultAnnotationSize(): number[] | undefined;
+    get defaultAnnotationSize(): number[];
     shapes: IShape[];
     scaleState: IStageState;
     currentTransformer: ITransformer;

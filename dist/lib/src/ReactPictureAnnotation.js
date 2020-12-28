@@ -298,6 +298,7 @@ var ReactPictureAnnotation = /** @class */ (function (_super) {
     ReactPictureAnnotation.defaultProps = {
         marginWithInput: 10,
         scrollSpeed: 0.0005,
+        defaultAnnotationSize: [10, 10],
         hideBoundingBoxes: false,
         annotationStyle: defaultShapeStyle,
         onLoad: function () { return undefined; },

@@ -1,4 +1,4 @@
-import { ReactPictureAnnotation } from "index";
+import { ReactPictureAnnotation } from "../index";
 import { IAnnotationState } from "./AnnotationState";
 export default class CreatingAnnotationState implements IAnnotationState {
     private readonly context;
@@ -6,6 +6,5 @@ export default class CreatingAnnotationState implements IAnnotationState {
     onMouseDown: () => undefined;
     onMouseMove: (positionX: number, positionY: number) => void;
     onMouseUp: () => void;
-    private applyDefaultAnnotationSize;
     onMouseLeave: () => void;
 }
