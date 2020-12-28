@@ -3,7 +3,6 @@ import { IAnnotation } from "./Annotation";
 import { IAnnotationState } from "./annotation/AnnotationState";
 import { DefaultAnnotationState } from "./annotation/DefaultAnnotationState";
 import DefaultInputSection from "./DefaultInputSection";
-// import DeleteButton from "./DeleteButton";
 import {
   defaultShapeStyle,
   IShape,
@@ -17,9 +16,11 @@ interface IReactPictureAnnotationProps {
   annotationData?: IAnnotation[];
   selectedId?: string | null;
   scrollSpeed: number;
+  hideBoundingBoxes?: boolean;
   marginWithInput: number;
   onChange: (annotationData: IAnnotation[]) => void;
   onSelect: (id: string | null) => void;
+  onLoad?: (e: Event) => void;
   width: number;
   height: number;
   image: string;
@@ -44,13 +45,13 @@ const defaultState: IStageState = {
   originY: 0,
 };
 
-export default class ReactPictureAnnotation extends React.Component<
-  IReactPictureAnnotationProps
-> {
+export default class ReactPictureAnnotation extends React.Component<IReactPictureAnnotationProps> {
   public static defaultProps = {
     marginWithInput: 10,
     scrollSpeed: 0.0005,
+    hideBoundingBoxes: false,
     annotationStyle: defaultShapeStyle,
+    onLoad: () => undefined,
     inputElement: (
       value: string,
       onChange: (value: string) => void,
@@ -267,14 +268,16 @@ export default class ReactPictureAnnotation extends React.Component<
     if (annotationData) {
       const refreshShapesWithAnnotationData = () => {
         this.selectedId = null;
-        this.shapes = annotationData.map(
-          (eachAnnotationData) =>
-            new RectShape(
-              eachAnnotationData,
-              this.onShapeChange,
-              this.annotationStyle
-            )
-        );
+        if (!this.props.hideBoundingBoxes) {
+          this.shapes = annotationData.map(
+            (eachAnnotationData) =>
+              new RectShape(
+                eachAnnotationData,
+                this.onShapeChange,
+                this.annotationStyle
+              )
+          );
+        }
         this.onShapeChange();
       };
 
@@ -361,7 +364,7 @@ export default class ReactPictureAnnotation extends React.Component<
         );
       } else {
         const nextImageNode = document.createElement("img");
-        nextImageNode.addEventListener("load", () => {
+        nextImageNode.addEventListener("load", (e) => {
           this.currentImageElement = nextImageNode;
           const { width, height } = nextImageNode;
           const imageNodeRatio = height / width;
@@ -386,6 +389,10 @@ export default class ReactPictureAnnotation extends React.Component<
           }
           this.onImageChange();
           this.onShapeChange();
+
+          if (this.props.onLoad) {
+            this.props.onLoad(e);
+          }
         });
         nextImageNode.alt = "";
         nextImageNode.src = this.props.image;
@@ -419,38 +426,5 @@ export default class ReactPictureAnnotation extends React.Component<
     this.currentAnnotationState.onMouseLeave();
   };
 
-  private onWheel = (event: React.WheelEvent<HTMLCanvasElement>) => {
-    // https://stackoverflow.com/a/31133823/9071503
-    const { clientHeight, scrollTop, scrollHeight } = event.currentTarget;
-    if (clientHeight + scrollTop + event.deltaY > scrollHeight) {
-      // event.preventDefault();
-      event.currentTarget.scrollTop = scrollHeight;
-    } else if (scrollTop + event.deltaY < 0) {
-      // event.preventDefault();
-      event.currentTarget.scrollTop = 0;
-    }
-
-    const { scale: preScale } = this.scaleState;
-    this.scaleState.scale += event.deltaY * this.props.scrollSpeed;
-    if (this.scaleState.scale > 10) {
-      this.scaleState.scale = 10;
-    }
-    if (this.scaleState.scale < 0.1) {
-      this.scaleState.scale = 0.1;
-    }
-
-    const { originX, originY, scale } = this.scaleState;
-    const { offsetX, offsetY } = event.nativeEvent;
-    this.scaleState.originX =
-      offsetX - ((offsetX - originX) / preScale) * scale;
-    this.scaleState.originY =
-      offsetY - ((offsetY - originY) / preScale) * scale;
-
-    this.setState({ imageScale: this.scaleState });
-
-    requestAnimationFrame(() => {
-      this.onShapeChange();
-      this.onImageChange();
-    });
-  };
+  private onWheel = () => undefined;
 }

@@ -11,36 +11,38 @@ var DefaultAnnotationState = /** @class */ (function () {
         this.onMouseUp = function () { return undefined; };
         this.onMouseLeave = function () { return undefined; };
         this.onMouseDown = function (positionX, positionY) {
-            var _a = _this.context, shapes = _a.shapes, currentTransformer = _a.currentTransformer, onShapeChange = _a.onShapeChange, setState = _a.setAnnotationState;
-            if (currentTransformer &&
-                currentTransformer.checkBoundary(positionX, positionY)) {
-                currentTransformer.startTransformation(positionX, positionY);
-                setState(new TransformationState(_this.context));
-                return;
-            }
-            for (var i = shapes.length - 1; i >= 0; i--) {
-                if (shapes[i].checkBoundary(positionX, positionY)) {
-                    _this.context.selectedId = shapes[i].getAnnotationData().id;
-                    _this.context.currentTransformer = new Transformer(shapes[i], _this.context.scaleState.scale);
-                    var selectedShape = shapes.splice(i, 1)[0];
-                    shapes.push(selectedShape);
-                    selectedShape.onDragStart(positionX, positionY);
-                    onShapeChange();
-                    setState(new DraggingAnnotationState(_this.context));
+            var _a = _this.context, shapes = _a.shapes, currentTransformer = _a.currentTransformer, onShapeChange = _a.onShapeChange, setState = _a.setAnnotationState, hideBoundingBoxes = _a.props.hideBoundingBoxes;
+            if (!hideBoundingBoxes) {
+                if (currentTransformer &&
+                    currentTransformer.checkBoundary(positionX, positionY)) {
+                    currentTransformer.startTransformation(positionX, positionY);
+                    setState(new TransformationState(_this.context));
                     return;
                 }
+                for (var i = shapes.length - 1; i >= 0; i--) {
+                    if (shapes[i].checkBoundary(positionX, positionY)) {
+                        _this.context.selectedId = shapes[i].getAnnotationData().id;
+                        _this.context.currentTransformer = new Transformer(shapes[i], _this.context.scaleState.scale);
+                        var selectedShape = shapes.splice(i, 1)[0];
+                        shapes.push(selectedShape);
+                        selectedShape.onDragStart(positionX, positionY);
+                        onShapeChange();
+                        setState(new DraggingAnnotationState(_this.context));
+                        return;
+                    }
+                }
+                _this.context.shapes.push(new RectShape({
+                    id: randomId(),
+                    mark: {
+                        x: positionX,
+                        y: positionY,
+                        width: 0,
+                        height: 0,
+                        type: "RECT",
+                    },
+                }, onShapeChange, _this.context.annotationStyle));
+                setState(new CreatingAnnotationState(_this.context));
             }
-            _this.context.shapes.push(new RectShape({
-                id: randomId(),
-                mark: {
-                    x: positionX,
-                    y: positionY,
-                    width: 0,
-                    height: 0,
-                    type: "RECT",
-                },
-            }, onShapeChange, _this.context.annotationStyle));
-            setState(new CreatingAnnotationState(_this.context));
         };
         this.context = context;
     }

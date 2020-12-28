@@ -23,49 +23,51 @@ export class DefaultAnnotationState implements IAnnotationState {
       currentTransformer,
       onShapeChange,
       setAnnotationState: setState,
+      props: { hideBoundingBoxes },
     } = this.context;
-
-    if (
-      currentTransformer &&
-      currentTransformer.checkBoundary(positionX, positionY)
-    ) {
-      currentTransformer.startTransformation(positionX, positionY);
-      setState(new TransformationState(this.context));
-      return;
-    }
-
-    for (let i = shapes.length - 1; i >= 0; i--) {
-      if (shapes[i].checkBoundary(positionX, positionY)) {
-        this.context.selectedId = shapes[i].getAnnotationData().id;
-        this.context.currentTransformer = new Transformer(
-          shapes[i],
-          this.context.scaleState.scale
-        );
-        const [selectedShape] = shapes.splice(i, 1);
-        shapes.push(selectedShape);
-        selectedShape.onDragStart(positionX, positionY);
-        onShapeChange();
-        setState(new DraggingAnnotationState(this.context));
+    if (!hideBoundingBoxes) {
+      if (
+        currentTransformer &&
+        currentTransformer.checkBoundary(positionX, positionY)
+      ) {
+        currentTransformer.startTransformation(positionX, positionY);
+        setState(new TransformationState(this.context));
         return;
       }
-    }
-    this.context.shapes.push(
-      new RectShape(
-        {
-          id: randomId(),
-          mark: {
-            x: positionX,
-            y: positionY,
-            width: 0,
-            height: 0,
-            type: "RECT",
-          },
-        },
-        onShapeChange,
-        this.context.annotationStyle
-      )
-    );
 
-    setState(new CreatingAnnotationState(this.context));
+      for (let i = shapes.length - 1; i >= 0; i--) {
+        if (shapes[i].checkBoundary(positionX, positionY)) {
+          this.context.selectedId = shapes[i].getAnnotationData().id;
+          this.context.currentTransformer = new Transformer(
+            shapes[i],
+            this.context.scaleState.scale
+          );
+          const [selectedShape] = shapes.splice(i, 1);
+          shapes.push(selectedShape);
+          selectedShape.onDragStart(positionX, positionY);
+          onShapeChange();
+          setState(new DraggingAnnotationState(this.context));
+          return;
+        }
+      }
+      this.context.shapes.push(
+        new RectShape(
+          {
+            id: randomId(),
+            mark: {
+              x: positionX,
+              y: positionY,
+              width: 0,
+              height: 0,
+              type: "RECT",
+            },
+          },
+          onShapeChange,
+          this.context.annotationStyle
+        )
+      );
+
+      setState(new CreatingAnnotationState(this.context));
+    }
   };
 }

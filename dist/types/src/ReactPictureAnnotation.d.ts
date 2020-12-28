@@ -7,9 +7,11 @@ interface IReactPictureAnnotationProps {
     annotationData?: IAnnotation[];
     selectedId?: string | null;
     scrollSpeed: number;
+    hideBoundingBoxes?: boolean;
     marginWithInput: number;
     onChange: (annotationData: IAnnotation[]) => void;
     onSelect: (id: string | null) => void;
+    onLoad?: (e: Event) => void;
     width: number;
     height: number;
     image: string;
@@ -26,7 +28,9 @@ export default class ReactPictureAnnotation extends React.Component<IReactPictur
     static defaultProps: {
         marginWithInput: number;
         scrollSpeed: number;
+        hideBoundingBoxes: boolean;
         annotationStyle: IShapeStyle;
+        onLoad: () => undefined;
         inputElement: (value: string, onChange: (value: string) => void, onDelete: () => void) => JSX.Element;
     };
     state: {

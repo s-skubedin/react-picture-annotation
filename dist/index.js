@@ -735,43 +735,46 @@
           shapes = _this$context.shapes,
           currentTransformer = _this$context.currentTransformer,
           onShapeChange = _this$context.onShapeChange,
-          setState = _this$context.setAnnotationState;
+          setState = _this$context.setAnnotationState,
+          hideBoundingBoxes = _this$context.props.hideBoundingBoxes;
 
-      if (currentTransformer && currentTransformer.checkBoundary(positionX, positionY)) {
-        currentTransformer.startTransformation(positionX, positionY);
-        setState(new TransformationState(_this.context));
-        return;
-      }
-
-      for (var i = shapes.length - 1; i >= 0; i--) {
-        if (shapes[i].checkBoundary(positionX, positionY)) {
-          _this.context.selectedId = shapes[i].getAnnotationData().id;
-          _this.context.currentTransformer = new Transformer(shapes[i], _this.context.scaleState.scale);
-
-          var _shapes$splice = shapes.splice(i, 1),
-              _shapes$splice2 = _slicedToArray(_shapes$splice, 1),
-              selectedShape = _shapes$splice2[0];
-
-          shapes.push(selectedShape);
-          selectedShape.onDragStart(positionX, positionY);
-          onShapeChange();
-          setState(new DraggingAnnotationState(_this.context));
+      if (!hideBoundingBoxes) {
+        if (currentTransformer && currentTransformer.checkBoundary(positionX, positionY)) {
+          currentTransformer.startTransformation(positionX, positionY);
+          setState(new TransformationState(_this.context));
           return;
         }
-      }
 
-      _this.context.shapes.push(new RectShape({
-        id: randomId(),
-        mark: {
-          x: positionX,
-          y: positionY,
-          width: 0,
-          height: 0,
-          type: "RECT"
+        for (var i = shapes.length - 1; i >= 0; i--) {
+          if (shapes[i].checkBoundary(positionX, positionY)) {
+            _this.context.selectedId = shapes[i].getAnnotationData().id;
+            _this.context.currentTransformer = new Transformer(shapes[i], _this.context.scaleState.scale);
+
+            var _shapes$splice = shapes.splice(i, 1),
+                _shapes$splice2 = _slicedToArray(_shapes$splice, 1),
+                selectedShape = _shapes$splice2[0];
+
+            shapes.push(selectedShape);
+            selectedShape.onDragStart(positionX, positionY);
+            onShapeChange();
+            setState(new DraggingAnnotationState(_this.context));
+            return;
+          }
         }
-      }, onShapeChange, _this.context.annotationStyle));
 
-      setState(new CreatingAnnotationState(_this.context));
+        _this.context.shapes.push(new RectShape({
+          id: randomId(),
+          mark: {
+            x: positionX,
+            y: positionY,
+            width: 0,
+            height: 0,
+            type: "RECT"
+          }
+        }, onShapeChange, _this.context.annotationStyle));
+
+        setState(new CreatingAnnotationState(_this.context));
+      }
     };
 
     this.context = context;
@@ -1004,9 +1007,12 @@
         if (annotationData) {
           var refreshShapesWithAnnotationData = function refreshShapesWithAnnotationData() {
             _this.selectedId = null;
-            _this.shapes = annotationData.map(function (eachAnnotationData) {
-              return new RectShape(eachAnnotationData, _this.onShapeChange, _this.annotationStyle);
-            });
+
+            if (!_this.props.hideBoundingBoxes) {
+              _this.shapes = annotationData.map(function (eachAnnotationData) {
+                return new RectShape(eachAnnotationData, _this.onShapeChange, _this.annotationStyle);
+              });
+            }
 
             _this.onShapeChange();
           };
@@ -1116,7 +1122,7 @@
             _this.imageCanvas2D.drawImage(_this.currentImageElement, originX, originY, _this.currentImageElement.width * scale, _this.currentImageElement.height * scale);
           } else {
             var nextImageNode = document.createElement("img");
-            nextImageNode.addEventListener("load", function () {
+            nextImageNode.addEventListener("load", function (e) {
               _this.currentImageElement = nextImageNode;
               var width = nextImageNode.width,
                   height = nextImageNode.height;
@@ -1149,6 +1155,10 @@
               _this.onImageChange();
 
               _this.onShapeChange();
+
+              if (_this.props.onLoad) {
+                _this.props.onLoad(e);
+              }
             });
             nextImageNode.alt = "";
             nextImageNode.src = _this.props.image;
@@ -1188,51 +1198,8 @@
         _this.currentAnnotationState.onMouseLeave();
       };
 
-      _this.onWheel = function (event) {
-        // https://stackoverflow.com/a/31133823/9071503
-        var _event$currentTarget = event.currentTarget,
-            clientHeight = _event$currentTarget.clientHeight,
-            scrollTop = _event$currentTarget.scrollTop,
-            scrollHeight = _event$currentTarget.scrollHeight;
-
-        if (clientHeight + scrollTop + event.deltaY > scrollHeight) {
-          // event.preventDefault();
-          event.currentTarget.scrollTop = scrollHeight;
-        } else if (scrollTop + event.deltaY < 0) {
-          // event.preventDefault();
-          event.currentTarget.scrollTop = 0;
-        }
-
-        var preScale = _this.scaleState.scale;
-        _this.scaleState.scale += event.deltaY * _this.props.scrollSpeed;
-
-        if (_this.scaleState.scale > 10) {
-          _this.scaleState.scale = 10;
-        }
-
-        if (_this.scaleState.scale < 0.1) {
-          _this.scaleState.scale = 0.1;
-        }
-
-        var _this$scaleState4 = _this.scaleState,
-            originX = _this$scaleState4.originX,
-            originY = _this$scaleState4.originY,
-            scale = _this$scaleState4.scale;
-        var _event$nativeEvent3 = event.nativeEvent,
-            offsetX = _event$nativeEvent3.offsetX,
-            offsetY = _event$nativeEvent3.offsetY;
-        _this.scaleState.originX = offsetX - (offsetX - originX) / preScale * scale;
-        _this.scaleState.originY = offsetY - (offsetY - originY) / preScale * scale;
-
-        _this.setState({
-          imageScale: _this.scaleState
-        });
-
-        requestAnimationFrame(function () {
-          _this.onShapeChange();
-
-          _this.onImageChange();
-        });
+      _this.onWheel = function () {
+        return undefined;
       };
 
       return _this;
@@ -1307,7 +1274,11 @@
   ReactPictureAnnotation.defaultProps = {
     marginWithInput: 10,
     scrollSpeed: 0.0005,
+    hideBoundingBoxes: false,
     annotationStyle: defaultShapeStyle,
+    onLoad: function onLoad() {
+      return undefined;
+    },
     inputElement: function inputElement(value, onChange, onDelete) {
       return /*#__PURE__*/React__default['default'].createElement(DefaultInputSection, {
         value: value,

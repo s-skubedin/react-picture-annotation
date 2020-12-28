@@ -14,7 +14,6 @@ var __extends = (this && this.__extends) || (function () {
 import React from "react";
 import { DefaultAnnotationState } from "./annotation/DefaultAnnotationState";
 import DefaultInputSection from "./DefaultInputSection";
-// import DeleteButton from "./DeleteButton";
 import { defaultShapeStyle, RectShape, } from "./Shape";
 import Transformer from "./Transformer";
 var defaultState = {
@@ -133,9 +132,11 @@ var ReactPictureAnnotation = /** @class */ (function (_super) {
             if (annotationData) {
                 var refreshShapesWithAnnotationData = function () {
                     _this.selectedId = null;
-                    _this.shapes = annotationData.map(function (eachAnnotationData) {
-                        return new RectShape(eachAnnotationData, _this.onShapeChange, _this.annotationStyle);
-                    });
+                    if (!_this.props.hideBoundingBoxes) {
+                        _this.shapes = annotationData.map(function (eachAnnotationData) {
+                            return new RectShape(eachAnnotationData, _this.onShapeChange, _this.annotationStyle);
+                        });
+                    }
                     _this.onShapeChange();
                 };
                 if (annotationData.length !== _this.shapes.length) {
@@ -206,7 +207,7 @@ var ReactPictureAnnotation = /** @class */ (function (_super) {
                 }
                 else {
                     var nextImageNode_1 = document.createElement("img");
-                    nextImageNode_1.addEventListener("load", function () {
+                    nextImageNode_1.addEventListener("load", function (e) {
                         _this.currentImageElement = nextImageNode_1;
                         var width = nextImageNode_1.width, height = nextImageNode_1.height;
                         var imageNodeRatio = height / width;
@@ -232,6 +233,9 @@ var ReactPictureAnnotation = /** @class */ (function (_super) {
                         }
                         _this.onImageChange();
                         _this.onShapeChange();
+                        if (_this.props.onLoad) {
+                            _this.props.onLoad(e);
+                        }
                     });
                     nextImageNode_1.alt = "";
                     nextImageNode_1.src = _this.props.image;
@@ -254,37 +258,7 @@ var ReactPictureAnnotation = /** @class */ (function (_super) {
         _this.onMouseLeave = function () {
             _this.currentAnnotationState.onMouseLeave();
         };
-        _this.onWheel = function (event) {
-            // https://stackoverflow.com/a/31133823/9071503
-            var _a = event.currentTarget, clientHeight = _a.clientHeight, scrollTop = _a.scrollTop, scrollHeight = _a.scrollHeight;
-            if (clientHeight + scrollTop + event.deltaY > scrollHeight) {
-                // event.preventDefault();
-                event.currentTarget.scrollTop = scrollHeight;
-            }
-            else if (scrollTop + event.deltaY < 0) {
-                // event.preventDefault();
-                event.currentTarget.scrollTop = 0;
-            }
-            var preScale = _this.scaleState.scale;
-            _this.scaleState.scale += event.deltaY * _this.props.scrollSpeed;
-            if (_this.scaleState.scale > 10) {
-                _this.scaleState.scale = 10;
-            }
-            if (_this.scaleState.scale < 0.1) {
-                _this.scaleState.scale = 0.1;
-            }
-            var _b = _this.scaleState, originX = _b.originX, originY = _b.originY, scale = _b.scale;
-            var _c = event.nativeEvent, offsetX = _c.offsetX, offsetY = _c.offsetY;
-            _this.scaleState.originX =
-                offsetX - ((offsetX - originX) / preScale) * scale;
-            _this.scaleState.originY =
-                offsetY - ((offsetY - originY) / preScale) * scale;
-            _this.setState({ imageScale: _this.scaleState });
-            requestAnimationFrame(function () {
-                _this.onShapeChange();
-                _this.onImageChange();
-            });
-        };
+        _this.onWheel = function () { return undefined; };
         return _this;
     }
     Object.defineProperty(ReactPictureAnnotation.prototype, "selectedId", {
@@ -324,7 +298,9 @@ var ReactPictureAnnotation = /** @class */ (function (_super) {
     ReactPictureAnnotation.defaultProps = {
         marginWithInput: 10,
         scrollSpeed: 0.0005,
+        hideBoundingBoxes: false,
         annotationStyle: defaultShapeStyle,
+        onLoad: function () { return undefined; },
         inputElement: function (value, onChange, onDelete) { return (React.createElement(DefaultInputSection, { value: value, onChange: onChange, onDelete: onDelete })); },
     };
     return ReactPictureAnnotation;
