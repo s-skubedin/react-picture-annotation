@@ -26,9 +26,10 @@ var CreatingAnnotationState = /** @class */ (function () {
                 annotationData.mark.height !== 0) {
                 var _b = _this.context.props.defaultAnnotationSize, width = _b[0], height = _b[1];
                 if (Math.abs(annotationData.mark.width) >= width &&
-                    Math.abs(annotationData.mark.height) >= height &&
-                    typeof annotationData.id !== "number") {
-                    _this.context.selectedId = annotationData.id;
+                    Math.abs(annotationData.mark.height) >= height) {
+                    if (typeof annotationData.id !== "number") {
+                        _this.context.selectedId = annotationData.id;
+                    }
                     _this.context.currentTransformer = new Transformer(data, _this.context.scaleState.scale);
                     shapes.push(data);
                 }

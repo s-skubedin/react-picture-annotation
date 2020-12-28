@@ -613,8 +613,11 @@ var CreatingAnnotationState = function CreatingAnnotationState(context) {
           width = _this$context$props$d[0],
           height = _this$context$props$d[1];
 
-      if (Math.abs(annotationData.mark.width) >= width && Math.abs(annotationData.mark.height) >= height && typeof annotationData.id !== "number") {
-        _this.context.selectedId = annotationData.id;
+      if (Math.abs(annotationData.mark.width) >= width && Math.abs(annotationData.mark.height) >= height) {
+        if (typeof annotationData.id !== "number") {
+          _this.context.selectedId = annotationData.id;
+        }
+
         _this.context.currentTransformer = new Transformer(data, _this.context.scaleState.scale);
         shapes.push(data);
       }
