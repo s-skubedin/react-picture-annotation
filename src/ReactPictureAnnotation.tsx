@@ -15,6 +15,7 @@ import Transformer, { ITransformer } from "./Transformer";
 interface IReactPictureAnnotationProps {
   annotationData?: IAnnotation[];
   selectedId?: string | null;
+  panelClassName?: string;
   scrollSpeed: number;
   hideBoundingBoxes?: boolean;
   marginWithInput: number;
@@ -51,6 +52,7 @@ export default class ReactPictureAnnotation extends React.Component<IReactPictur
     scrollSpeed: 0.0005,
     defaultAnnotationSize: [10, 10],
     hideBoundingBoxes: false,
+    panelClassName: "",
     annotationStyle: defaultShapeStyle,
     onLoad: () => undefined,
     inputElement: (
@@ -163,7 +165,7 @@ export default class ReactPictureAnnotation extends React.Component<IReactPictur
   };
 
   public render() {
-    const { width, height, inputElement } = this.props;
+    const { width, height, inputElement, panelClassName } = this.props;
     const { showInput, inputPosition, inputComment } = this.state;
     return (
       <div className="rp-stage">
@@ -187,7 +189,10 @@ export default class ReactPictureAnnotation extends React.Component<IReactPictur
           onWheel={this.onWheel}
         />
         {showInput && (
-          <div className="rp-selected-input" style={inputPosition}>
+          <div
+            className={panelClassName}
+            style={{ position: "absolute", ...inputPosition }}
+          >
             {inputElement(
               inputComment,
               this.onInputCommentChange,

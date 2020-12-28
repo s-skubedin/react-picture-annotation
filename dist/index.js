@@ -60,6 +60,55 @@
     return Constructor;
   }
 
+  function _defineProperty(obj, key, value) {
+    if (key in obj) {
+      Object.defineProperty(obj, key, {
+        value: value,
+        enumerable: true,
+        configurable: true,
+        writable: true
+      });
+    } else {
+      obj[key] = value;
+    }
+
+    return obj;
+  }
+
+  function ownKeys(object, enumerableOnly) {
+    var keys = Object.keys(object);
+
+    if (Object.getOwnPropertySymbols) {
+      var symbols = Object.getOwnPropertySymbols(object);
+      if (enumerableOnly) symbols = symbols.filter(function (sym) {
+        return Object.getOwnPropertyDescriptor(object, sym).enumerable;
+      });
+      keys.push.apply(keys, symbols);
+    }
+
+    return keys;
+  }
+
+  function _objectSpread2(target) {
+    for (var i = 1; i < arguments.length; i++) {
+      var source = arguments[i] != null ? arguments[i] : {};
+
+      if (i % 2) {
+        ownKeys(Object(source), true).forEach(function (key) {
+          _defineProperty(target, key, source[key]);
+        });
+      } else if (Object.getOwnPropertyDescriptors) {
+        Object.defineProperties(target, Object.getOwnPropertyDescriptors(source));
+      } else {
+        ownKeys(Object(source)).forEach(function (key) {
+          Object.defineProperty(target, key, Object.getOwnPropertyDescriptor(source, key));
+        });
+      }
+    }
+
+    return target;
+  }
+
   function _inherits(subClass, superClass) {
     if (typeof superClass !== "function" && superClass !== null) {
       throw new TypeError("Super expression must either be null or a function");
@@ -1196,7 +1245,8 @@
         var _this$props3 = this.props,
             width = _this$props3.width,
             height = _this$props3.height,
-            inputElement = _this$props3.inputElement;
+            inputElement = _this$props3.inputElement,
+            panelClassName = _this$props3.panelClassName;
         var _this$state = this.state,
             showInput = _this$state.showInput,
             inputPosition = _this$state.inputPosition,
@@ -1227,8 +1277,10 @@
           onMouseLeave: this.onMouseLeave,
           onWheel: this.onWheel
         }), showInput && /*#__PURE__*/React__default['default'].createElement("div", {
-          className: "rp-selected-input",
-          style: inputPosition
+          className: panelClassName,
+          style: _objectSpread2({
+            position: 'absolute'
+          }, inputPosition)
         }, inputElement(inputComment, this.onInputCommentChange, this.onDelete)));
       }
     }, {
@@ -1261,6 +1313,7 @@
     scrollSpeed: 0.0005,
     defaultAnnotationSize: [10, 10],
     hideBoundingBoxes: false,
+    panelClassName: '',
     annotationStyle: defaultShapeStyle,
     onLoad: function onLoad() {
       return undefined;

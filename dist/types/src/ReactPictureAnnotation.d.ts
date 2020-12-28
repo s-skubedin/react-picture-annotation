@@ -6,6 +6,7 @@ import { ITransformer } from "./Transformer";
 interface IReactPictureAnnotationProps {
     annotationData?: IAnnotation[];
     selectedId?: string | null;
+    panelClassName?: string;
     scrollSpeed: number;
     hideBoundingBoxes?: boolean;
     marginWithInput: number;
@@ -30,6 +31,7 @@ export default class ReactPictureAnnotation extends React.Component<IReactPictur
         scrollSpeed: number;
         defaultAnnotationSize: number[];
         hideBoundingBoxes: boolean;
+        panelClassName: string;
         annotationStyle: IShapeStyle;
         onLoad: () => undefined;
         inputElement: (value: string, onChange: (value: string) => void, onDelete: () => void) => JSX.Element;

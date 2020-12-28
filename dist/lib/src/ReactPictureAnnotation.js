@@ -11,6 +11,17 @@ var __extends = (this && this.__extends) || (function () {
         d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
     };
 })();
+var __assign = (this && this.__assign) || function () {
+    __assign = Object.assign || function(t) {
+        for (var s, i = 1, n = arguments.length; i < n; i++) {
+            s = arguments[i];
+            for (var p in s) if (Object.prototype.hasOwnProperty.call(s, p))
+                t[p] = s[p];
+        }
+        return t;
+    };
+    return __assign.apply(this, arguments);
+};
 import React from "react";
 import { DefaultAnnotationState } from "./annotation/DefaultAnnotationState";
 import DefaultInputSection from "./DefaultInputSection";
@@ -288,18 +299,19 @@ var ReactPictureAnnotation = /** @class */ (function (_super) {
         configurable: true
     });
     ReactPictureAnnotation.prototype.render = function () {
-        var _a = this.props, width = _a.width, height = _a.height, inputElement = _a.inputElement;
+        var _a = this.props, width = _a.width, height = _a.height, inputElement = _a.inputElement, panelClassName = _a.panelClassName;
         var _b = this.state, showInput = _b.showInput, inputPosition = _b.inputPosition, inputComment = _b.inputComment;
         return (React.createElement("div", { className: "rp-stage" },
             React.createElement("canvas", { style: { width: width, height: height }, className: "rp-image", ref: this.imageCanvasRef, width: width * 2, height: height * 2 }),
             React.createElement("canvas", { className: "rp-shapes", style: { width: width, height: height }, ref: this.canvasRef, width: width * 2, height: height * 2, onMouseDown: this.onMouseDown, onMouseMove: this.onMouseMove, onMouseUp: this.onMouseUp, onMouseLeave: this.onMouseLeave, onWheel: this.onWheel }),
-            showInput && (React.createElement("div", { className: "rp-selected-input", style: inputPosition }, inputElement(inputComment, this.onInputCommentChange, this.onDelete)))));
+            showInput && (React.createElement("div", { className: panelClassName, style: __assign({ position: 'absolute' }, inputPosition) }, inputElement(inputComment, this.onInputCommentChange, this.onDelete)))));
     };
     ReactPictureAnnotation.defaultProps = {
         marginWithInput: 10,
         scrollSpeed: 0.0005,
         defaultAnnotationSize: [10, 10],
         hideBoundingBoxes: false,
+        panelClassName: '',
         annotationStyle: defaultShapeStyle,
         onLoad: function () { return undefined; },
         inputElement: function (value, onChange, onDelete) { return (React.createElement(DefaultInputSection, { value: value, onChange: onChange, onDelete: onDelete })); },
