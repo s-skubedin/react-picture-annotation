@@ -37,7 +37,11 @@ var CreatingAnnotationState = /** @class */ (function () {
             onShapeChange();
             setAnnotationState(new DefaultAnnotationState(_this.context));
         };
-        this.onMouseLeave = function () { return _this.onMouseUp(); };
+        this.onMouseLeave = function () {
+            if (!_this.context.selectedId) {
+                _this.onMouseUp();
+            }
+        };
         this.context = context;
     }
     return CreatingAnnotationState;

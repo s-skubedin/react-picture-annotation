@@ -54,5 +54,9 @@ export default class CreatingAnnotationState implements IAnnotationState {
     setAnnotationState(new DefaultAnnotationState(this.context));
   };
 
-  public onMouseLeave = () => this.onMouseUp();
+  public onMouseLeave = () => {
+    if (!this.context.selectedId) {
+      this.onMouseUp();
+    }
+  };
 }

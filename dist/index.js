@@ -687,7 +687,9 @@
     };
 
     this.onMouseLeave = function () {
-      return _this.onMouseUp();
+      if (!_this.context.selectedId) {
+        _this.onMouseUp();
+      }
     };
 
     this.context = context;
