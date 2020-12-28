@@ -32,7 +32,8 @@ export default class CreatingAnnotationState implements IAnnotationState {
       data &&
       annotationData &&
       annotationData.mark.width !== 0 &&
-      annotationData.mark.height !== 0
+      annotationData.mark.height !== 0 &&
+      typeof annotationData.id !== "number"
     ) {
       const [width, height] = this.context.props.defaultAnnotationSize;
 

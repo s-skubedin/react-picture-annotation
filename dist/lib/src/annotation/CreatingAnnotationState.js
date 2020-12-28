@@ -23,7 +23,8 @@ var CreatingAnnotationState = /** @class */ (function () {
             if (data &&
                 annotationData &&
                 annotationData.mark.width !== 0 &&
-                annotationData.mark.height !== 0) {
+                annotationData.mark.height !== 0 &&
+                typeof annotationData.id !== 'number') {
                 var _b = _this.context.props.defaultAnnotationSize, width = _b[0], height = _b[1];
                 if (Math.abs(annotationData.mark.width) >= width &&
                     Math.abs(annotationData.mark.height) >= height) {

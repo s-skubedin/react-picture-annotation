@@ -608,7 +608,7 @@ var CreatingAnnotationState = function CreatingAnnotationState(context) {
     _this.context.selectedId = null;
     var annotationData = data && data.getAnnotationData();
 
-    if (data && annotationData && annotationData.mark.width !== 0 && annotationData.mark.height !== 0) {
+    if (data && annotationData && annotationData.mark.width !== 0 && annotationData.mark.height !== 0 && typeof annotationData.id !== 'number') {
       var _this$context$props$d = _slicedToArray(_this.context.props.defaultAnnotationSize, 2),
           width = _this$context$props$d[0],
           height = _this$context$props$d[1];
