@@ -14,14 +14,14 @@ import Transformer, { ITransformer } from "./Transformer";
 
 interface IReactPictureAnnotationProps {
   annotationData?: IAnnotation[];
-  selectedId?: string | null;
+  selectedId?: string | number | null;
   panelClassName?: string;
   panelStyle?: ElementCSSInlineStyle;
   scrollSpeed: number;
   hideBoundingBoxes?: boolean;
   marginWithInput: number;
   onChange: (annotationData: IAnnotation[]) => void;
-  onSelect: (id: string | null) => void;
+  onSelect: (id: string | number | null) => void;
   onLoad?: (e: Event) => void;
   width: number;
   height: number;
@@ -78,7 +78,7 @@ export default class ReactPictureAnnotation extends React.Component<IReactPictur
     inputComment: "",
   };
 
-  set selectedId(value: string | null) {
+  set selectedId(value: string | number | null) {
     const { onSelect } = this.props;
     this.selectedIdTrueValue = value;
     onSelect(value);
@@ -101,7 +101,7 @@ export default class ReactPictureAnnotation extends React.Component<IReactPictur
   public currentTransformer: ITransformer;
 
   private currentAnnotationData: IAnnotation[] = [];
-  private selectedIdTrueValue: string | null;
+  private selectedIdTrueValue: string | number | null;
   private canvasRef = React.createRef<HTMLCanvasElement>();
   private canvas2D?: CanvasRenderingContext2D | null;
   private imageCanvasRef = React.createRef<HTMLCanvasElement>();

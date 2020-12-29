@@ -5,14 +5,14 @@ import { IShape, IShapeBase, IShapeStyle } from "./Shape";
 import { ITransformer } from "./Transformer";
 interface IReactPictureAnnotationProps {
     annotationData?: IAnnotation[];
-    selectedId?: string | null;
+    selectedId?: string | number | null;
     panelClassName?: string;
     panelStyle?: ElementCSSInlineStyle;
     scrollSpeed: number;
     hideBoundingBoxes?: boolean;
     marginWithInput: number;
     onChange: (annotationData: IAnnotation[]) => void;
-    onSelect: (id: string | null) => void;
+    onSelect: (id: string | number | null) => void;
     onLoad?: (e: Event) => void;
     width: number;
     height: number;
@@ -45,8 +45,8 @@ export default class ReactPictureAnnotation extends React.Component<IReactPictur
         showInput: boolean;
         inputComment: string;
     };
-    set selectedId(value: string | null);
-    get selectedId(): string | null;
+    set selectedId(value: string | number | null);
+    get selectedId(): string | number | null;
     get annotationStyle(): IShapeStyle;
     get defaultAnnotationSize(): number[];
     shapes: IShape[];

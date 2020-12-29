@@ -643,7 +643,7 @@
           shapes = _this$context.shapes,
           selectedId = _this$context.selectedId;
 
-      if (shapes.length > 0 && !selectedId) {
+      if (shapes.length > 0 && (!selectedId || selectedId === -1)) {
         var currentShape = shapes[shapes.length - 1];
 
         var _currentShape$getAnno = currentShape.getAnnotationData(),
@@ -687,7 +687,7 @@
     };
 
     this.onMouseLeave = function () {
-      if (!_this.context.selectedId) {
+      if (!_this.context.selectedId || _this.context.selectedId === -1) {
         _this.onMouseUp();
       }
     };

@@ -6,7 +6,7 @@ var CreatingAnnotationState = /** @class */ (function () {
         this.onMouseDown = function () { return undefined; };
         this.onMouseMove = function (positionX, positionY) {
             var _a = _this.context, shapes = _a.shapes, selectedId = _a.selectedId;
-            if (shapes.length > 0 && !selectedId) {
+            if (shapes.length > 0 && (!selectedId || selectedId === -1)) {
                 var currentShape = shapes[shapes.length - 1];
                 var _b = currentShape.getAnnotationData().mark, x = _b.x, y = _b.y;
                 currentShape.adjustMark({
@@ -38,7 +38,7 @@ var CreatingAnnotationState = /** @class */ (function () {
             setAnnotationState(new DefaultAnnotationState(_this.context));
         };
         this.onMouseLeave = function () {
-            if (!_this.context.selectedId) {
+            if (!_this.context.selectedId || _this.context.selectedId === -1) {
                 _this.onMouseUp();
             }
         };

@@ -37,7 +37,7 @@ storiesOf("Hello World", module)
         },
       ]);
 
-      const [selectedId, setSelectedId] = useState<string | null>("a");
+      const [selectedId, setSelectedId] = useState<string | number | null>("a");
 
       const onResize = () => {
         setSize({
