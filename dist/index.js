@@ -1250,7 +1250,8 @@
             width = _this$props3.width,
             height = _this$props3.height,
             inputElement = _this$props3.inputElement,
-            panelClassName = _this$props3.panelClassName;
+            panelClassName = _this$props3.panelClassName,
+            panelStyle = _this$props3.panelStyle;
         var _this$state = this.state,
             showInput = _this$state.showInput,
             inputPosition = _this$state.inputPosition,
@@ -1282,9 +1283,9 @@
           onWheel: this.onWheel
         }), showInput && /*#__PURE__*/React__default['default'].createElement("div", {
           className: panelClassName,
-          style: _objectSpread2({
+          style: _objectSpread2(_objectSpread2({
             position: "absolute"
-          }, inputPosition)
+          }, inputPosition), panelStyle)
         }, inputElement(inputComment, this.onInputCommentChange, this.onDelete)));
       }
     }, {

@@ -7,6 +7,7 @@ interface IReactPictureAnnotationProps {
     annotationData?: IAnnotation[];
     selectedId?: string | null;
     panelClassName?: string;
+    panelStyle?: ElementCSSInlineStyle;
     scrollSpeed: number;
     hideBoundingBoxes?: boolean;
     marginWithInput: number;

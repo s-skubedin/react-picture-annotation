@@ -299,12 +299,12 @@ var ReactPictureAnnotation = /** @class */ (function (_super) {
         configurable: true
     });
     ReactPictureAnnotation.prototype.render = function () {
-        var _a = this.props, width = _a.width, height = _a.height, inputElement = _a.inputElement, panelClassName = _a.panelClassName;
+        var _a = this.props, width = _a.width, height = _a.height, inputElement = _a.inputElement, panelClassName = _a.panelClassName, panelStyle = _a.panelStyle;
         var _b = this.state, showInput = _b.showInput, inputPosition = _b.inputPosition, inputComment = _b.inputComment;
         return (React.createElement("div", { className: "rp-stage" },
             React.createElement("canvas", { style: { width: width, height: height }, className: "rp-image", ref: this.imageCanvasRef, width: width * 2, height: height * 2 }),
             React.createElement("canvas", { className: "rp-shapes", style: { width: width, height: height }, ref: this.canvasRef, width: width * 2, height: height * 2, onMouseDown: this.onMouseDown, onMouseMove: this.onMouseMove, onMouseUp: this.onMouseUp, onMouseLeave: this.onMouseLeave, onWheel: this.onWheel }),
-            showInput && (React.createElement("div", { className: panelClassName, style: __assign({ position: "absolute" }, inputPosition) }, inputElement(inputComment, this.onInputCommentChange, this.onDelete)))));
+            showInput && (React.createElement("div", { className: panelClassName, style: __assign(__assign({ position: "absolute" }, inputPosition), panelStyle) }, inputElement(inputComment, this.onInputCommentChange, this.onDelete)))));
     };
     ReactPictureAnnotation.defaultProps = {
         marginWithInput: 10,

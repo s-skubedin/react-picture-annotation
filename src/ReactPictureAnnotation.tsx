@@ -16,6 +16,7 @@ interface IReactPictureAnnotationProps {
   annotationData?: IAnnotation[];
   selectedId?: string | null;
   panelClassName?: string;
+  panelStyle?: ElementCSSInlineStyle;
   scrollSpeed: number;
   hideBoundingBoxes?: boolean;
   marginWithInput: number;
@@ -165,7 +166,13 @@ export default class ReactPictureAnnotation extends React.Component<IReactPictur
   };
 
   public render() {
-    const { width, height, inputElement, panelClassName } = this.props;
+    const {
+      width,
+      height,
+      inputElement,
+      panelClassName,
+      panelStyle,
+    } = this.props;
     const { showInput, inputPosition, inputComment } = this.state;
     return (
       <div className="rp-stage">
@@ -191,7 +198,7 @@ export default class ReactPictureAnnotation extends React.Component<IReactPictur
         {showInput && (
           <div
             className={panelClassName}
-            style={{ position: "absolute", ...inputPosition }}
+            style={{ position: "absolute", ...inputPosition, ...panelStyle }}
           >
             {inputElement(
               inputComment,
