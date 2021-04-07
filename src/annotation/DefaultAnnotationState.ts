@@ -5,7 +5,7 @@ import randomId from "../utils/randomId";
 import { IAnnotationState } from "./AnnotationState";
 import CreatingAnnotationState from "./CreatingAnnotationState";
 import DraggingAnnotationState from "./DraggingAnnotationState";
-import TransformationState from "./TransfromationState";
+// import TransformationState from "./TransfromationState";
 
 export class DefaultAnnotationState implements IAnnotationState {
   private readonly context: ReactPictureAnnotation;
@@ -20,20 +20,20 @@ export class DefaultAnnotationState implements IAnnotationState {
   public onMouseDown = (positionX: number, positionY: number) => {
     const {
       shapes,
-      currentTransformer,
+      // currentTransformer,
       onShapeChange,
       setAnnotationState: setState,
       props: { hideBoundingBoxes },
     } = this.context;
     if (!hideBoundingBoxes) {
-      if (
-        currentTransformer &&
-        currentTransformer.checkBoundary(positionX, positionY)
-      ) {
-        currentTransformer.startTransformation(positionX, positionY);
-        setState(new TransformationState(this.context));
-        return;
-      }
+      // if (
+      //   currentTransformer &&
+      //   currentTransformer.checkBoundary(positionX, positionY)
+      // ) {
+      //   currentTransformer.startTransformation(positionX, positionY);
+      //   setState(new TransformationState(this.context));
+      //   return;
+      // }
 
       for (let i = shapes.length - 1; i >= 0; i--) {
         if (shapes[i].checkBoundary(positionX, positionY)) {
@@ -50,10 +50,11 @@ export class DefaultAnnotationState implements IAnnotationState {
           return;
         }
       }
+      const id = randomId();
       this.context.shapes.push(
         new RectShape(
           {
-            id: randomId(),
+            id,
             mark: {
               x: positionX,
               y: positionY,

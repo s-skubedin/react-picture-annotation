@@ -23,21 +23,9 @@ storiesOf("Hello World", module)
 
       const [annotationData, setAnnotationData] = useState<
         IAnnotation<IShapeData>[]
-      >([
-        {
-          id: "a",
-          comment: "HA HA HA",
-          mark: {
-            type: "RECT",
-            width: 161,
-            height: 165,
-            x: 229,
-            y: 92,
-          },
-        },
-      ]);
+      >([]);
 
-      const [selectedId, setSelectedId] = useState<string | number | null>("a");
+      const [selectedId, setSelectedId] = useState<string | number | null>(-1);
 
       const onResize = () => {
         setSize({
@@ -66,8 +54,8 @@ storiesOf("Hello World", module)
             shapeStrokeStyle: "#2193ff",
             transformerBackground: "black",
           }}
-          defaultAnnotationSize={[120, 90]}
-          image="https://bequank.oss-cn-beijing.aliyuncs.com/landpage/large/60682895_p0_master1200.jpg"
+          defaultAnnotationSize={[90, 120]}
+          image="https://semiotech-ohio.s3-us-east-2.amazonaws.com/US7012345B2/US7012345B2-8.png"
           inputElement={(value, onChange, onDelete) => (
             <DefaultInputSection
               placeholder={"Hello world"}
