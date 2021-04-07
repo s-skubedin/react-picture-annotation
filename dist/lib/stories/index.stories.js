@@ -22,20 +22,8 @@ storiesOf("Hello World", module)
             width: window.innerWidth - 16,
             height: window.innerHeight - 16,
         }), size = _a[0], setSize = _a[1];
-        var _b = useState([
-            {
-                id: "a",
-                comment: "HA HA HA",
-                mark: {
-                    type: "RECT",
-                    width: 161,
-                    height: 165,
-                    x: 229,
-                    y: 92,
-                },
-            },
-        ]), annotationData = _b[0], setAnnotationData = _b[1];
-        var _c = useState("a"), selectedId = _c[0], setSelectedId = _c[1];
+        var _b = useState([]), annotationData = _b[0], setAnnotationData = _b[1];
+        var _c = useState(-1), selectedId = _c[0], setSelectedId = _c[1];
         var onResize = function () {
             setSize({
                 width: window.innerWidth - 16,
@@ -48,7 +36,7 @@ storiesOf("Hello World", module)
                 window.removeEventListener("resize", onResize);
             };
         }, []);
-        return (React.createElement(ReactPictureAnnotation, { width: size.width, height: size.height, annotationData: annotationData, onChange: function (data) { return setAnnotationData(data); }, selectedId: selectedId, onSelect: function (e) { return setSelectedId(e); }, annotationStyle: __assign(__assign({}, defaultShapeStyle), { shapeStrokeStyle: "#2193ff", transformerBackground: "black" }), defaultAnnotationSize: [120, 90], image: "https://bequank.oss-cn-beijing.aliyuncs.com/landpage/large/60682895_p0_master1200.jpg", inputElement: function (value, onChange, onDelete) { return (React.createElement(DefaultInputSection, __assign({ placeholder: "Hello world" }, { value: value, onChange: onChange, onDelete: onDelete }))); } }));
+        return (React.createElement(ReactPictureAnnotation, { width: size.width, height: size.height, annotationData: annotationData, onChange: function (data) { return setAnnotationData(data); }, selectedId: selectedId, onSelect: function (e) { return setSelectedId(e); }, annotationStyle: __assign(__assign({}, defaultShapeStyle), { shapeStrokeStyle: "#2193ff", transformerBackground: "black" }), defaultAnnotationSize: [90, 120], image: "https://semiotech-ohio.s3-us-east-2.amazonaws.com/US7012345B2/US7012345B2-8.png", inputElement: function (value, onChange, onDelete) { return (React.createElement(DefaultInputSection, __assign({ placeholder: "Hello world" }, { value: value, onChange: onChange, onDelete: onDelete }))); } }));
     };
     return React.createElement(AnnotationComponent, null);
 });

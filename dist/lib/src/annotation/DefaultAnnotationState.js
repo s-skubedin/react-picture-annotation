@@ -3,7 +3,7 @@ import Transformer from "../Transformer";
 import randomId from "../utils/randomId";
 import CreatingAnnotationState from "./CreatingAnnotationState";
 import DraggingAnnotationState from "./DraggingAnnotationState";
-import TransformationState from "./TransfromationState";
+// import TransformationState from "./TransfromationState";
 var DefaultAnnotationState = /** @class */ (function () {
     function DefaultAnnotationState(context) {
         var _this = this;
@@ -11,14 +11,18 @@ var DefaultAnnotationState = /** @class */ (function () {
         this.onMouseUp = function () { return undefined; };
         this.onMouseLeave = function () { return undefined; };
         this.onMouseDown = function (positionX, positionY) {
-            var _a = _this.context, shapes = _a.shapes, currentTransformer = _a.currentTransformer, onShapeChange = _a.onShapeChange, setState = _a.setAnnotationState, hideBoundingBoxes = _a.props.hideBoundingBoxes;
+            var _a = _this.context, shapes = _a.shapes, 
+            // currentTransformer,
+            onShapeChange = _a.onShapeChange, setState = _a.setAnnotationState, hideBoundingBoxes = _a.props.hideBoundingBoxes;
             if (!hideBoundingBoxes) {
-                if (currentTransformer &&
-                    currentTransformer.checkBoundary(positionX, positionY)) {
-                    currentTransformer.startTransformation(positionX, positionY);
-                    setState(new TransformationState(_this.context));
-                    return;
-                }
+                // if (
+                //   currentTransformer &&
+                //   currentTransformer.checkBoundary(positionX, positionY)
+                // ) {
+                //   currentTransformer.startTransformation(positionX, positionY);
+                //   setState(new TransformationState(this.context));
+                //   return;
+                // }
                 for (var i = shapes.length - 1; i >= 0; i--) {
                     if (shapes[i].checkBoundary(positionX, positionY)) {
                         _this.context.selectedId = shapes[i].getAnnotationData().id;
@@ -31,8 +35,9 @@ var DefaultAnnotationState = /** @class */ (function () {
                         return;
                     }
                 }
+                var id = randomId();
                 _this.context.shapes.push(new RectShape({
-                    id: randomId(),
+                    id: id,
                     mark: {
                         x: positionX,
                         y: positionY,

@@ -714,33 +714,6 @@ var DraggingAnnotationState = function DraggingAnnotationState(context) {
   this.context = context;
 };
 
-var TransformationState = function TransformationState(context) {
-  var _this = this;
-
-  _classCallCheck(this, TransformationState);
-
-  this.context = void 0;
-
-  this.onMouseDown = function () {
-    return undefined;
-  };
-
-  this.onMouseMove = function () {
-    return undefined;
-  };
-
-  this.onMouseUp = function () {
-    var setAnnotationState = _this.context.setAnnotationState;
-    setAnnotationState(new DefaultAnnotationState(_this.context));
-  };
-
-  this.onMouseLeave = function () {
-    return _this.onMouseUp();
-  };
-
-  this.context = context;
-};
-
 var DefaultAnnotationState = function DefaultAnnotationState(context) {
   var _this = this;
 
@@ -763,18 +736,19 @@ var DefaultAnnotationState = function DefaultAnnotationState(context) {
   this.onMouseDown = function (positionX, positionY) {
     var _this$context = _this.context,
         shapes = _this$context.shapes,
-        currentTransformer = _this$context.currentTransformer,
         onShapeChange = _this$context.onShapeChange,
         setState = _this$context.setAnnotationState,
         hideBoundingBoxes = _this$context.props.hideBoundingBoxes;
 
     if (!hideBoundingBoxes) {
-      if (currentTransformer && currentTransformer.checkBoundary(positionX, positionY)) {
-        currentTransformer.startTransformation(positionX, positionY);
-        setState(new TransformationState(_this.context));
-        return;
-      }
-
+      // if (
+      //   currentTransformer &&
+      //   currentTransformer.checkBoundary(positionX, positionY)
+      // ) {
+      //   currentTransformer.startTransformation(positionX, positionY);
+      //   setState(new TransformationState(this.context));
+      //   return;
+      // }
       for (var i = shapes.length - 1; i >= 0; i--) {
         if (shapes[i].checkBoundary(positionX, positionY)) {
           _this.context.selectedId = shapes[i].getAnnotationData().id;
@@ -792,8 +766,10 @@ var DefaultAnnotationState = function DefaultAnnotationState(context) {
         }
       }
 
+      var id = randomId();
+
       _this.context.shapes.push(new RectShape({
-        id: randomId(),
+        id: id,
         mark: {
           x: positionX,
           y: positionY,
